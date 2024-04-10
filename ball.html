@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>PinBall</title>
+    <title>小球</title>
     <style>
         body {
             display: flex;
@@ -14,10 +14,14 @@
             overflow: hidden; /* 禁止页面滚动 */
         }
 
+        #gameContainer {
+            position: relative;
+            text-align: center;
+        }
+
         #gameCanvas {
             background: #000;
-            border: 2px solid green;
-            touch-action: none; /* 禁止 canvas 默认触摸行为 */
+            border: 2px solid rgb(78, 125, 190);
         }
 
         #game-over {
@@ -33,20 +37,61 @@
         }
 
         #restart-button {
-            background: green;
+            background: rgb(55, 82, 189);
             color: #fff;
             border: none;
             padding: 10px 20px;
             font-size: 18px;
             cursor: pointer;
         }
+
+        #sliderContainer {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 850px;
+            text-align: center;
+        }
+         input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 10px;
+            background-color: lightgray;
+            border-radius: 5px;
+        }
+
+        /* 设置滑块条样式 */
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 30%; 
+            background-color: rgb(230, 230, 230); 
+            cursor: pointer;
+        }
+
+        #slider {
+            width: 100%;
+            height: 20px;
+            background: rgb(134, 183, 229);
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
-    <div id="game-over">
-        <p>你输了！</p>
-        <button id="restart-button">重来</button>
+    <div id="gameContainer">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div id="game-over">
+            <p>你输了！</p>
+            <button id="restart-button">重来</button>
+        </div>
+    </div>
+
+    <div id="sliderContainer">
+        <input type="range" min="0" max="800" value="400" id="slider">
     </div>
 
     <script>
@@ -55,6 +100,7 @@
 
     const gameOverScreen = document.getElementById('game-over');
     const restartButton = document.getElementById('restart-button');
+    const slider = document.getElementById('slider');
 
     let gamePaused = false;
     const gameTimeLimit = 999; // 游戏持续时间（秒）
@@ -82,9 +128,9 @@
 
       // 在左上角绘制时间
       const remainingTime = Math.max(0, elapsedTime);
-      ctx.font = '20px Arial';
-      ctx.fillStyle = 'green';
-      ctx.fillText(`时间: ${remainingTime.toFixed(1)} s`, 10, 20);
+      ctx.font = '35px Arial';
+      ctx.fillStyle = 'rgb(78, 125, 190)';
+      ctx.fillText(`时间: ${remainingTime.toFixed(1)} s`, 20, 35);
     }
 
     restartButton.addEventListener('click', () => {
@@ -99,26 +145,11 @@
 
     const paddleWidth = 75;
     const paddleHeight = 10;
-    let paddleX = (canvas.width - paddleWidth) / 2;
+    let paddleX = slider.value - paddleWidth / 2; // 初始化挡板位置
 
-    document.addEventListener('mousemove', mouseMoveHandler);
-    document.addEventListener('touchmove', touchMoveHandler);
-
-    function mouseMoveHandler(e) {
-      const relativeX = e.clientX;
-      if (relativeX > 0 && relativeX < canvas.width) {
-        paddleX = relativeX - paddleWidth / 2;
-      }
-    }
-
-    function touchMoveHandler(e) {
-      e.preventDefault(); // 阻止默认触摸滚动行为
-      const touch = e.touches[0];
-      const relativeX = touch.clientX;
-      if (relativeX > 0 && relativeX < canvas.width) {
-        paddleX = relativeX - paddleWidth / 2;
-      }
-    }
+    slider.addEventListener('input', () => {
+      paddleX = slider.value - paddleWidth / 2; // 更新挡板位置
+    });
 
     function drawBall() {
       ctx.beginPath();
