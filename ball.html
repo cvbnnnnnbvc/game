@@ -17,11 +17,15 @@
         #gameCanvas {
             background: #000;
             border: 2px solid green;
+            touch-action: none; /* 禁止 canvas 默认触摸行为 */
         }
 
         #game-over {
             display: none;
             position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             text-align: center;
             font-size: 24px;
             color: #fff;
@@ -41,7 +45,7 @@
 <body>
     <canvas id="gameCanvas" width="800" height="600"></canvas>
     <div id="game-over">
-        <p>你输了!</p>
+        <p>你输了！</p>
         <button id="restart-button">重来</button>
     </div>
 
@@ -97,11 +101,11 @@
     const paddleHeight = 10;
     let paddleX = (canvas.width - paddleWidth) / 2;
 
-    canvas.addEventListener('mousemove', mouseMoveHandler);
-    canvas.addEventListener('touchmove', touchMoveHandler);
+    document.addEventListener('mousemove', mouseMoveHandler);
+    document.addEventListener('touchmove', touchMoveHandler);
 
     function mouseMoveHandler(e) {
-      const relativeX = e.clientX - canvas.getBoundingClientRect().left;
+      const relativeX = e.clientX;
       if (relativeX > 0 && relativeX < canvas.width) {
         paddleX = relativeX - paddleWidth / 2;
       }
@@ -110,7 +114,7 @@
     function touchMoveHandler(e) {
       e.preventDefault(); // 阻止默认触摸滚动行为
       const touch = e.touches[0];
-      const relativeX = touch.clientX - canvas.getBoundingClientRect().left;
+      const relativeX = touch.clientX;
       if (relativeX > 0 && relativeX < canvas.width) {
         paddleX = relativeX - paddleWidth / 2;
       }
