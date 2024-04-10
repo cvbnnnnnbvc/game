@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
+  <meta charset="UTF-8">
     <title>小球</title>
     <style>
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
             height: 100vh;
             margin: 0;
             background: #000;
             overflow: hidden; /* 禁止页面滚动 */
         }
 
-        #gameContainer {
-            position: relative;
-            text-align: center;
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center; /* 水平居中 */
+            align-items: center; /* 垂直居中 */
         }
+        .box {
+          text-align: center;
+        } 
 
         #gameCanvas {
             background: #000;
@@ -47,8 +50,8 @@
 
         #sliderContainer {
             position: absolute;
-            bottom: 40px;
             left: 50%;
+            margin-top: 50px;
             transform: translateX(-50%);
             width: 850px;
             text-align: center;
@@ -76,23 +79,24 @@
         #slider {
             width: 100%;
             height: 20px;
-            background: rgb(134, 183, 229);
+            background: rgb(59, 78, 96);
             cursor: pointer;
         }
     </style>
 </head>
 <body>
+  <div class="box">
     <div id="gameContainer">
-        <canvas id="gameCanvas" width="800" height="600"></canvas>
-        <div id="game-over">
-            <p>你输了！</p>
-            <button id="restart-button">重来</button>
-        </div>
+      <canvas id="gameCanvas" width="800" height="600"></canvas>
+      <div id="game-over">
+          <p>你输了！</p>
+          <button id="restart-button">重来</button>
+      </div>
     </div>
-
-    <div id="sliderContainer">
-        <input type="range" min="0" max="800" value="400" id="slider">
-    </div>
+  <div id="sliderContainer">
+      <input type="range" min="0" max="800" value="400" id="slider">
+  </div>
+  </div>
 
     <script>
     const canvas = document.getElementById('gameCanvas');
